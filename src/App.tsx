@@ -71,6 +71,7 @@ function App() {
       {/* Generic Components — Stock table */}
       <h2 style={{ color: '#1E40AF' }}>Live Quotes</h2>
       <DataTable<Stock>
+        pageSize={10}
         data={filteredStocks}
         rowKey='id'
         onRowClick={setSelectedStock}
@@ -101,6 +102,7 @@ function App() {
       {/* Generic Components — Trade table */}
       <h2 style={{ color: '#1E40AF' }}>Trade History</h2>
       <DataTable<Trade>
+        pageSize={5}
         data={tradeHistory}
         rowKey='id'
         columns={[
@@ -129,6 +131,7 @@ function App() {
 
       <h2 style={{ color: '#1E40AF' }}>Holdings</h2>
       <DataTable<Holding>
+        pageSize={10}
         data={holdings}
         rowKey='id'
         columns={[
@@ -159,6 +162,7 @@ function App() {
       }}> Positions</h2>
 
       <DataTable<Position>
+        pageSize={10}
         data={positions}
         rowKey='id'
         columns={
