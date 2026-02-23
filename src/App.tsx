@@ -13,6 +13,8 @@ import PortfolioSummary   from './components/PortfolioSummary';
 import SearchBar          from './components/SearchBar';
 import DataTable          from './components/DataTable';
 import TradeForm          from './components/TradeForm';
+import type { Holding } from './types/holding.types';
+import { holdings } from './data/holdingsData';
  
 function App() {
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
@@ -112,6 +114,28 @@ function App() {
         onSubmitTrade={handleNewTrade}
         initialValues={selectedStock ?? {}}
       />
+
+      <h2 style={{ color: '#1E40AF' }}>Holdings</h2>
+ <DataTable<Holding>
+  data={holdings}
+  rowKey='id'
+  columns={[
+    { key: 'symbol',        header: 'Symbol',        },
+    { key: 'qty',           header: 'Qty',},
+    { key: 'investedValue', header: 'Invested Value',
+      render: v => `$${Number(v).toLocaleString()}` },
+    { key: 'currentValue',  header: 'Current Value',
+      render: v => `$${Number(v).toLocaleString()}` },
+    { key: 'totalReturn',   header: 'Total Return',
+      render: v => {
+        const n = Number(v);
+        return <span style={{ color: n >= 0 ? '#166534' : '#991B1B', fontWeight: 'bold' }}>
+          {n >= 0 ? '+' : ''}${n.toFixed(2)}
+        </span>;
+      }},
+  ]}
+/>
+
     </div>
   );
 }
