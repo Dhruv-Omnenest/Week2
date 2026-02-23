@@ -135,15 +135,15 @@ function App() {
           { key: 'symbol', header: 'Symbol', },
           { key: 'qty', header: 'Qty', },
           {
-            key: 'investedValue', header: 'Invested Value',
+            key: 'investedValue', header: 'Invested Value', sortable: true,
             render: v => `$${Number(v).toLocaleString()}`
           },
           {
-            key: 'currentValue', header: 'Current Value',
+            key: 'currentValue', header: 'Current Value', sortable : true,
             render: v => `$${Number(v).toLocaleString()}`
           },
           {
-            key: 'totalReturn', header: 'Total Return',
+            key: 'totalReturn', header: 'Total Return',sortable:true,
             render: v => {
               const n = Number(v);
               return <span style={{ color: n >= 0 ? '#166534' : '#991B1B', fontWeight: 'bold' }}>
@@ -170,11 +170,11 @@ function App() {
               render: v => `$${Number(v).toFixed(2)}`
             },
             {
-              key: 'ltp', header: 'LTP',
+              key: 'ltp', header: 'LTP', sortable:true,
               render: v => `$${Number(v).toFixed(2)}`
             },
             {
-              key: 'pnl', header: 'P&L',
+              key: 'pnl', header: 'P&L', sortable:true,
               render: v => {
                 const n = Number(v);
                 return (
@@ -186,7 +186,7 @@ function App() {
               }
             },
             {
-              key: 'pnlPct', header: 'P&L %',
+              key: 'pnlPct', header: 'P&L %',sortable:true,
               render: v => {
                 const n = Number(v);
                 return (
