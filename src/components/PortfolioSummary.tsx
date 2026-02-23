@@ -23,7 +23,7 @@ const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ availableStocks }) 
     });
 
     const [selectedSector, setSelectedSector] = useState<string>("All");
-    const [sortBy, setSortBy] = useState<"price" | "change" | "volume">("price");
+  //  const [sortBy, setSortBy] = useState<"price" | "change" | "volume">("price");
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -39,6 +39,7 @@ const PortfolioSummary: React.FC<PortfolioSummaryProps> = ({ availableStocks }) 
                 error: null,
             });
         }, 800);
+        console.log(timer)
     }, [availableStocks]);
 
 
