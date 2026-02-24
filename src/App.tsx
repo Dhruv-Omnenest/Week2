@@ -1,39 +1,18 @@
-// src/App.tsx
 import { useState } from 'react';
-
-// Data
 import { stocks, trades } from './data/stockData';
-
-// Types
+import { holdings } from './data/holdingsData';
+import { positions } from './data/positionData';
 import type { Stock, Trade } from './types/stock.types';
 
-// Components
-import StockCard from './components/StockCard';
-import PortfolioSummary from './components/PortfolioSummary';
-import SearchBar from './components/SearchBar';
-import DataTable from './components/DataTable';
-import TradeForm from './components/TradeForm';
-import type { Holding } from './types/holding.types';
-import { holdings } from './data/holdingsData';
-import type { Position } from './types/position.type';
-import { positions } from './data/positionData';
+import QuotesSection from './components/QuoteSection';
+import HoldingsSection from './components/Holdings';
 import TradeFeature from './components/TradeFeature';
+import PositionsFeature from './features/postionFeatures/PositionFeatures';
 
 function App() {
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sectorFilter, setSectorFilter] = useState('');
   const [tradeHistory, setTradeHistory] = useState<Trade[]>(trades);
 
-  // Filter stocks based on search and sector
-  const filteredStocks = stocks.filter(s => {
-    const matchesSearch = s.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-      || s.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesSector = !sectorFilter || s.sector === sectorFilter;
-    return matchesSearch && matchesSector;
-  });
-
-  // Add a new trade (receives NewTradeInput — no id/date)
   const handleNewTrade = (input: Omit<Trade, 'id' | 'date'>) => {
     const newTrade: Trade = {
       ...input,
@@ -44,178 +23,32 @@ function App() {
   };
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto', padding: 24, fontFamily: 'Arial, sans-serif' }}>
+    <main style={{ maxWidth: 1100, margin: '0 auto', padding: 24 }}>
       <h1 style={{ color: '#1E3A8A' }}>Stock Market Dashboard</h1>
 
-      Event Typing
-      <SearchBar
-        onSearch={setSearchQuery}
-        onFilterChange={setSectorFilter}
-        placeholder='Search by symbol or name...'
+      {/* 1. Market Data & Search */}
+      <QuotesSection 
+        stocks={stocks} 
+        selectedStock={selectedStock} 
+        onSelectStock={setSelectedStock} 
       />
 
-      Typing Props
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-        {filteredStocks.map(stock => (
-          <StockCard
-            key={stock.id}
-            stock={stock}
-            isSelected={selectedStock?.id === stock.id}
-            onSelect={setSelectedStock}
-          />
-        ))}
-      </div>
-
-      Typing State
-      <PortfolioSummary availableStocks={stocks} />
-
-       Generic Components — Stock table
-       <h2 style={{ color: '#1E40AF' }}>Live Quotes</h2>
-      <DataTable<Stock>
-        pageSize={10}
-        data={filteredStocks}
-        rowKey='id'
-        onRowClick={setSelectedStock}
-        emptyMessage='No stocks match your search.'
-        columns={[
-          { key: 'symbol', header: 'Symbol' },
-          { key: 'name', header: 'Company' },
-          {
-            key: 'price', header: 'Price',
-            render: v => `$${Number(v).toFixed(2)}`
-          },
-          {
-            key: 'changePct', header: 'Change %',
-            render: v => {
-              const n = Number(v);
-              return <span style={{ color: n >= 0 ? 'green' : 'red' }}>
-                {n >= 0 ? '+' : ''}{n.toFixed(2)}%
-              </span>;
-            }
-          },
-          {
-            key: 'volume', header: 'Volume',
-            render: v => Number(v).toLocaleString()
-          },
-        ]}
-      /> 
-
-      Generic Components — Trade table
-       <h2 style={{ color: '#1E40AF' }}>Trade History</h2>
-      <DataTable<Trade>
-        pageSize={5}
-        data={tradeHistory}
-        rowKey='id'
-        columns={[
-          { key: 'symbol', header: 'Symbol' },
-          {
-            key: 'type', header: 'Type',
-            render: v => <strong style={{ color: v === 'BUY' ? 'green' : 'red' }}>
-              {String(v)}</strong>
-          },
-          { key: 'quantity', header: 'Qty' },
-          {
-            key: 'price', header: 'Price',
-            render: v => `$${Number(v).toFixed(2)}`
-          },
-          { key: 'date', header: 'Date' },
-        ]}
-      /> 
-
-       Utility Types
-      <h2 style={{ color: '#1E40AF' }}>New Trade</h2>
-      <TradeForm
-        stocks={stocks}
-        onSubmitTrade={handleNewTrade}
-        initialValues={selectedStock ?? {}}
+      {/* 2. Portfolio & Assets */}
+      <HoldingsSection 
+        stocks={stocks} 
+        holdings={holdings} 
       />
 
-      <h2 style={{ color: '#1E40AF' }}>Holdings</h2>
-      <DataTable<Holding>
-        pageSize={10}
-        data={holdings}
-        rowKey='id'
-        columns={[
-          { key: 'symbol', header: 'Symbol', },
-          { key: 'qty', header: 'Qty', },
-          {
-            key: 'investedValue', header: 'Invested Value', sortable: true,
-            render: v => `$${Number(v).toLocaleString()}`
-          },
-          {
-            key: 'currentValue', header: 'Current Value', sortable: true,
-            render: v => `$${Number(v).toLocaleString()}`
-          },
-          {
-            key: 'totalReturn', header: 'Total Return', sortable: true,
-            render: v => {
-              const n = Number(v);
-              return <span style={{ color: n >= 0 ? '#166534' : '#991B1B', fontWeight: 'bold' }}>
-                {n >= 0 ? '+' : ''}${n.toFixed(2)}
-              </span>;
-            }
-          },
-        ]}
-      />
+      <PositionsFeature positions={positions} />
 
-      <h2 style={{
-        color: '#1E40AF'
-      }}> Positions</h2>
-
-      <DataTable<Position>
-        pageSize={10}
-        data={positions}
-        rowKey='id'
-        columns={
-          [
-            { key: 'symbol', header: 'Symbol' },
-            { key: 'qty', header: 'Qty' },
-            {
-              key: 'avgPrice', header: 'Avg Price',
-              render: v => `$${Number(v).toFixed(2)}`
-            },
-            {
-              key: 'ltp', header: 'LTP', sortable: true,
-              render: v => `$${Number(v).toFixed(2)}`
-            },
-            {
-              key: 'pnl', header: 'P&L', sortable: true,
-              render: v => {
-                const n = Number(v);
-                return (
-                  <span style={{ color: n >= 0 ? '#166534' : '#991B1B' }}>
-                    {n >= 0 ? '+' : ''}{n.toFixed(2)}%
-                  </span>
-
-                )
-              }
-            },
-            {
-              key: 'pnlPct', header: 'P&L %', sortable: true,
-              render: v => {
-                const n = Number(v);
-                return (
-                  <span style={{ color: n >= 0 ? '#166534' : '#991B1B' }}>
-                    {n >= 0 ? '+' : ''}{n.toFixed(2)}%
-                  </span>
-
-                )
-              }
-            },
-
-          ]
-        } 
-         />
+      {/* 3. Trading Interface */}
       <TradeFeature
         stocks={stocks}
         tradeHistory={tradeHistory}
-        selectedStock={stocks[0]}
-        onSubmitTrade={() => {
-
-        }}
+        selectedStock={selectedStock || stocks[0]}
+        onSubmitTrade={handleNewTrade}
       />
-
-    </div>
+    </main>
   );
 }
 
