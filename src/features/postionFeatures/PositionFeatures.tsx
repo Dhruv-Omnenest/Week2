@@ -1,69 +1,65 @@
 
 import React from 'react';
-import DataTable from '../../components/DataTable';
+import DataTable    from '../../components/DataTable';
 import type { Position } from '../../types/position.type';
-import useInfiniteScroll from '../../customHooks/useInfiniteScroll';
-
-interface Props {
+ 
+interface PositionsFeatureProps {
   positions: Position[];
 }
-
-const PositionsFeature: React.FC<Props> = ({ positions }) => {
-  const { visibleItems, bottomRef, hasMore } = useInfiniteScroll(positions, 5);
-
+ 
+// Helper: render a number as a coloured cell
+// value  = the raw cell value
+// suffix = '%' for percentage columns, '' (empty) for dollar columns
+function pnlCell(value: unknown, suffix: string = ''): React.ReactNode {
+ 
+  // Convert the raw value to a number
+  var numberValue  = Number(value);
+ 
+  // Colour based on positive or negative
+  var isPositive   = numberValue >= 0;
+  var textColour   = isPositive ? '#166534' : '#991B1B';
+ 
+  // '+' before positive numbers (negative numbers already have '-')
+  var prefix = isPositive ? '+' : '';
+ 
+  // '$' before dollar values, nothing before percentages
+  var currencySign = suffix === '%' ? '' : '$';
+ 
   return (
-    <section>
+    <span style={{ color: textColour, fontWeight: 'bold' }}>
+      {prefix}{currencySign}{numberValue.toFixed(2)}{suffix}
+    </span>
+  );
+}
+ 
+const PositionsFeature: React.FC<PositionsFeatureProps> = ({ positions }) => {
+  return (
+    <>
       <h2 style={{ color: '#1E40AF' }}>Positions</h2>
-
       <DataTable<Position>
-        data={visibleItems} 
-        rowKey='id'
+        data={positions}
+        rowKey="id"
+        //filterKey="symbol"
+        pageSize={10}
         columns={[
-          { key: 'symbol', header: 'Symbol' },
-          { key: 'qty', header: 'Qty' },
-          {
-            key: 'avgPrice', header: 'Avg Price',
-            render: v => `$${Number(v).toFixed(2)}`
+          { key: 'symbol',   header: 'Symbol',    sortable: true },
+          { key: 'qty',      header: 'Qty',       sortable: true },
+          { key: 'avgPrice', header: 'Avg Price', sortable: true,
+            render: function(value) { return '$' + Number(value).toFixed(2); }
           },
-          {
-            key: 'ltp', header: 'LTP', sortable: true,
-            render: v => `$${Number(v).toFixed(2)}`
+          { key: 'ltp',      header: 'LTP',       sortable: true,
+            render: function(value) { return '$' + Number(value).toFixed(2); }
           },
-          {
-            key: 'pnl', header: 'P&L', sortable: true,
-            render: v => {
-              const n = Number(v);
-              return (
-                <span style={{ color: n >= 0 ? '#166534' : '#991B1B' }}>
-                  {n >= 0 ? '+' : ''}{n.toFixed(2)}%
-                </span>
-              );
-            }
+          { key: 'pnl',    header: 'P&L',   sortable: true,
+            render: function(value) { return pnlCell(value); }
           },
-          {
-            key: 'pnlPct', header: 'P&L %', sortable: true,
-            render: v => {
-              const n = Number(v);
-              return (
-                <span style={{ color: n >= 0 ? '#166534' : '#991B1B' }}>
-                  {n >= 0 ? '+' : ''}{n.toFixed(2)}%
-                </span>
-              );
-            }
+          { key: 'pnlPct', header: 'P&L %', sortable: true,
+            render: function(value) { return pnlCell(value, '%'); }
           },
         ]}
       />
-
-      <div ref={bottomRef} style={{ height: 1 }} />
-      <div style={{ padding: '16px', textAlign: 'center', color: '#6B7280', fontSize: '14px' }}>
-        {hasMore ? (
-          <p>Loading more positions...</p>
-        ) : (
-          <p>You've reached the end of your positions.</p>
-        )}
-      </div>
-    </section>
+    </>
   );
 };
-
+ 
 export default PositionsFeature;
