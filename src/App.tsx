@@ -9,6 +9,7 @@ import { holdings } from './data/holdingsData';
 import FormSkeleton from './skeleton/FormSkeleton';
 import { positions } from './data/positionData';
 import type { NewTradeInput } from './features/tradeFeature/TradeFeature';
+import CurrencyTicker from './components/currencyTicker';
 
 
 const LiveQuotesFeature = lazy(function() {
@@ -57,6 +58,7 @@ function App() {
   }
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: 24, fontFamily: 'Arial, sans-serif' }}>
+      <CurrencyTicker/>
       <h1 style={{ color: '#1E3A8A' }}>Stock Market Dashboard</h1>
       <SuspenseBoundary
         fallback={
