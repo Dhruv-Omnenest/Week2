@@ -7,6 +7,7 @@ import type { Stock, Trade } from './types/stock.types';
 import QuotesSection from './components/QuoteSection';
 import HoldingsSection from './components/Holdings';
 import TradeFeature from './components/TradeFeature';
+import PositionsFeature from './features/postionFeatures/PositionFeatures';
 
 function App() {
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
@@ -36,8 +37,9 @@ function App() {
       <HoldingsSection 
         stocks={stocks} 
         holdings={holdings} 
-        positions={positions} 
       />
+
+      <PositionsFeature positions={positions} />
 
       {/* 3. Trading Interface */}
       <TradeFeature
