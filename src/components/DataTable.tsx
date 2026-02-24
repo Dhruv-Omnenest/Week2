@@ -32,11 +32,11 @@ function DataTable<T extends object>({
   onRowClick,
   emptyMessage = "No data found.",
   searchableKey,
-  pageSize=10,
+ // pageSize=10,
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<SortState<T>>({ key: null, dir: null });
   const [filterText, setFilterText] = useState("");
-  const [page, setPage] = useState(1);
+ // const [page, setPage] = useState(1);
 
   const handleSort = (key: keyof T) => {
     setSort(prev => ({
@@ -69,21 +69,21 @@ function DataTable<T extends object>({
   }, [filteredData, sort]);
 
   // ---------------- PAGINATION ----------------
-  const totalPages = Math.max(
-    1,
-    Math.ceil(sortedAndFilteredData.length / pageSize)
-  );
+  // const totalPages = Math.max(
+  //   1,
+  //   Math.ceil(sortedAndFilteredData.length / pageSize)
+  // );
 
-  const safePage = Math.min(page, totalPages);
+  // const safePage = Math.min(page, totalPages);
 
-  const paginatedData = sortedAndFilteredData.slice(
-    (safePage - 1) * pageSize,
-    safePage * pageSize
-  );
+  // const paginatedData = sortedAndFilteredData.slice(
+  //   (safePage - 1) * pageSize,
+  //   safePage * pageSize
+  // );
 
   // Reset page when search OR data changes
   useEffect(() => {
-    setPage(1);
+    //setPage(1);
   }, [filterText, data]);
 
   return (
@@ -147,8 +147,8 @@ function DataTable<T extends object>({
         </thead>
 
         <tbody>
-          {paginatedData.length > 0 ? (
-            paginatedData.map((row, ri) => (
+          {sortedAndFilteredData.length > 0 ? (
+            sortedAndFilteredData.map((row, ri) => (
               <tr
                 key={String(row[rowKey])}
                 onClick={() => onRowClick?.(row)}
@@ -180,7 +180,7 @@ function DataTable<T extends object>({
         </tbody>
       </table>
 
-      {/* PAGINATION CONTROLS */}
+      {/* PAGINATION CONTROLS
       {totalPages > 1 && (
         <div
           style={{
@@ -208,7 +208,7 @@ function DataTable<T extends object>({
             Next →
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
