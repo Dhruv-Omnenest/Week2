@@ -17,6 +17,7 @@ import type { Holding } from './types/holding.types';
 import { holdings } from './data/holdingsData';
 import type { Position } from './types/position.type';
 import { positions } from './data/positionData';
+import TradeFeature from './components/TradeFeature';
 
 function App() {
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
@@ -46,14 +47,14 @@ function App() {
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: 24, fontFamily: 'Arial, sans-serif' }}>
       <h1 style={{ color: '#1E3A8A' }}>Stock Market Dashboard</h1>
 
-      {/* Event Typing */}
+      Event Typing
       <SearchBar
         onSearch={setSearchQuery}
         onFilterChange={setSectorFilter}
         placeholder='Search by symbol or name...'
       />
 
-      {/* Typing Props */}
+      Typing Props
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
         {filteredStocks.map(stock => (
           <StockCard
@@ -65,11 +66,11 @@ function App() {
         ))}
       </div>
 
-      {/* Typing State */}
+      Typing State
       <PortfolioSummary availableStocks={stocks} />
 
-      {/* Generic Components — Stock table */}
-      <h2 style={{ color: '#1E40AF' }}>Live Quotes</h2>
+       Generic Components — Stock table
+       <h2 style={{ color: '#1E40AF' }}>Live Quotes</h2>
       <DataTable<Stock>
         pageSize={10}
         data={filteredStocks}
@@ -97,10 +98,10 @@ function App() {
             render: v => Number(v).toLocaleString()
           },
         ]}
-      />
+      /> 
 
-      {/* Generic Components — Trade table */}
-      <h2 style={{ color: '#1E40AF' }}>Trade History</h2>
+      Generic Components — Trade table
+       <h2 style={{ color: '#1E40AF' }}>Trade History</h2>
       <DataTable<Trade>
         pageSize={5}
         data={tradeHistory}
@@ -119,9 +120,9 @@ function App() {
           },
           { key: 'date', header: 'Date' },
         ]}
-      />
+      /> 
 
-      {/* Utility Types */}
+       Utility Types
       <h2 style={{ color: '#1E40AF' }}>New Trade</h2>
       <TradeForm
         stocks={stocks}
@@ -142,11 +143,11 @@ function App() {
             render: v => `$${Number(v).toLocaleString()}`
           },
           {
-            key: 'currentValue', header: 'Current Value', sortable : true,
+            key: 'currentValue', header: 'Current Value', sortable: true,
             render: v => `$${Number(v).toLocaleString()}`
           },
           {
-            key: 'totalReturn', header: 'Total Return',sortable:true,
+            key: 'totalReturn', header: 'Total Return', sortable: true,
             render: v => {
               const n = Number(v);
               return <span style={{ color: n >= 0 ? '#166534' : '#991B1B', fontWeight: 'bold' }}>
@@ -174,11 +175,11 @@ function App() {
               render: v => `$${Number(v).toFixed(2)}`
             },
             {
-              key: 'ltp', header: 'LTP', sortable:true,
+              key: 'ltp', header: 'LTP', sortable: true,
               render: v => `$${Number(v).toFixed(2)}`
             },
             {
-              key: 'pnl', header: 'P&L', sortable:true,
+              key: 'pnl', header: 'P&L', sortable: true,
               render: v => {
                 const n = Number(v);
                 return (
@@ -190,7 +191,7 @@ function App() {
               }
             },
             {
-              key: 'pnlPct', header: 'P&L %',sortable:true,
+              key: 'pnlPct', header: 'P&L %', sortable: true,
               render: v => {
                 const n = Number(v);
                 return (
@@ -203,8 +204,15 @@ function App() {
             },
 
           ]
-        }
+        } 
+         />
+      <TradeFeature
+        stocks={stocks}
+        tradeHistory={tradeHistory}
+        selectedStock={stocks[0]}
+        onSubmitTrade={() => {
 
+        }}
       />
 
     </div>
