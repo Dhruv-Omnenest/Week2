@@ -24,7 +24,7 @@ function useVirtualList<T> (items:T[],options:VirtualListOptions){
         
 
         function onScroll(){
-            setScrollTop(container?.scrollTop as number);
+            setScrollTop(container?.scrollTop ?? 0 );
         }
 
         container.addEventListener('scroll',onScroll);
