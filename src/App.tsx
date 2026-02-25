@@ -7,7 +7,6 @@ import CardGridSkeleton from './skeleton/CardGridSkeleton';
 import TableSkeleton from './skeleton/TableSkeleton';
 import { holdings } from './data/holdingsData';
 import FormSkeleton from './skeleton/FormSkeleton';
-import { positions } from './data/positionData';
 import type { NewTradeInput } from './features/tradeFeature/TradeFeature';
 import CurrencyTicker from './components/currencyTicker';
 import StockComparePanel from './components/stockComparePanel';
