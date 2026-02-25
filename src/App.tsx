@@ -87,7 +87,7 @@ const TradeFeature = lazy(function() {
       <SuspenseBoundary
         fallback={<TableSkeleton rows={5} cols={6} title="Positions" />}
       >
-        <PositionsFeature positions={positions} />
+        <PositionsFeature/>
       </SuspenseBoundary>
  
       <SuspenseBoundary
