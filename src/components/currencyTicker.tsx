@@ -10,7 +10,10 @@ const CurrencyTicker: React.FC = () => {
 
       <div style={tickerStyle}>
         {[...data, ...data].map((item, index) => (
-          <div style={itemStyle} key={index}>
+          <div
+           style={itemStyle} 
+           key={`${item.symbol}-${index}`}
+          >
             <span style={symbolStyle}>{item.symbol}</span>
 
             <span style={priceStyle}>
