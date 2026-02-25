@@ -45,6 +45,8 @@ const wrapperStyle: React.CSSProperties = {
 const tickerStyle: React.CSSProperties = {
   display: "flex",
   animation: "scroll 25s linear infinite",
+  willChange: "transform", 
+  backfaceVisibility: "hidden",
 };
 
 const itemStyle: React.CSSProperties = {
