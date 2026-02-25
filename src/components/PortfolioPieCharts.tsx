@@ -32,8 +32,6 @@ export default function PortfolioPieChart({ data }: Props) {
 
   return (
     <div style={{ width: "100%", height: 500, marginBottom: 24 }}>
-      <h3>Portfolio Allocation</h3>
-
       <ResponsiveContainer width="100%" height={350}>
         <PieChart>
           <Pie
