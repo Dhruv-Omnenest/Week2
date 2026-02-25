@@ -10,6 +10,7 @@ import FormSkeleton from './skeleton/FormSkeleton';
 import { positions } from './data/positionData';
 import type { NewTradeInput } from './features/tradeFeature/TradeFeature';
 import CurrencyTicker from './components/currencyTicker';
+import StockComparePanel from './components/stockComparePanel';
 
 
 const LiveQuotesFeature = lazy(function() {
@@ -31,7 +32,7 @@ const HoldingsFeature = lazy(function() {
 const TradeFeature = lazy(function() {
   return import('./features/tradeFeature/TradeFeature');
 });
-function App() {
+ function App() {
   const [selectedStock,  setSelectedStock]  = useState<Stock | null>(null);
   const [searchQuery,    setSearchQuery]    = useState('');
   const [sectorFilter,   setSectorFilter]   = useState('');
@@ -60,6 +61,7 @@ function App() {
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: 24, fontFamily: 'Arial, sans-serif' }}>
       <CurrencyTicker/>
       <h1 style={{ color: '#1E3A8A' }}>Stock Market Dashboard</h1>
+      <StockComparePanel/>
       <SuspenseBoundary
         fallback={
           <>
@@ -109,7 +111,6 @@ function App() {
           onSubmitTrade={handleNewTrade}
         />
       </SuspenseBoundary>
- 
     </div>
   );
 }
