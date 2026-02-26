@@ -23,7 +23,6 @@ function pnlCell(value: unknown, suffix: string = ''): React.ReactNode {
 const PositionsFeature: React.FC = () => {
   const positions = usePositionsStore((s) => s.positions);
   const removePosition = usePositionsStore((s) => s.removePosition);
-  const addPosition = usePositionsStore((s) => (s.addPosition));
   const compareList = usePositionsStore((s) => s.compareList);
   const toggleCompare = usePositionsStore((s) => s.toggleCompare);
 
@@ -114,39 +113,7 @@ const PositionsFeature: React.FC = () => {
                 Remove
               </button>
             )
-          },
-          {
-            key: 'add-btn-col' as any,
-            header: 'Add',
-            render: (_, pos) => (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addPosition({
-                    symbol: pos.symbol,
-                    qty: 1,               
-                    avgPrice: pos.ltp,
-                    ltp: pos.ltp,        
-                    pnl: pos.pnl,         
-                    pnlPct: pos.pnlPct  
-                  });
-                }}
-                style={{
-                  color: '#166534',
-                  border: '1px solid #DCFCE7',
-                  background: '#F0FDF4',
-                  padding: '4px 8px',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '11px'
-                }}
-              >
-                +1 Qty
-              </button>
-            )
           }
-
-
         ]}
       />
 
