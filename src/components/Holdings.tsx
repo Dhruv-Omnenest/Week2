@@ -7,7 +7,6 @@ interface Props {
   stocks: Stock[];
   holdings: Holding[];
 }
-
 export default function HoldingsSection({ stocks, holdings }: Props) {
   return (
     <section>
