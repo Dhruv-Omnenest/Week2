@@ -6,8 +6,8 @@ import DataTable from '../../components/DataTable';
 import TradeForm from '../../components/TradeForm';
 
 interface TradeFeatureProps {
-  stocks: Stock[];         // Still needed for the dropdown
-  selectedStock: Stock | null; // Still needed for pre-filling the form
+  stocks: Stock[];       
+  selectedStock: Stock | null;
 }
 
 const TradeFeature: React.FC<TradeFeatureProps> = ({ stocks, selectedStock }) => {

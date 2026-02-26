@@ -7,10 +7,10 @@ interface Props {
   stocks: Stock[];
   holdings: Holding[];
 }
-export default function HoldingsSection({ stocks, holdings }: Props) {
+export default function HoldingsSection({  holdings }: Props) {
   return (
     <section>
-      <PortfolioSummary availableStocks={stocks} />
+      <PortfolioSummary />
 
       <h3>Holdings</h3>
       <DataTable<Holding> data={holdings} rowKey="id" columns={
