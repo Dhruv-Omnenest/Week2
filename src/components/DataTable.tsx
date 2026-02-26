@@ -15,7 +15,7 @@ interface DataTableProps<T extends object> {
   onRowClick?: (row: T) => void;
   emptyMessage?: string;
   searchableKey?: keyof T;
-  pageSize?: number; 
+  pageSize?: number;
 }
 
 type SortDir = "asc" | "desc" | null;
@@ -32,11 +32,9 @@ function DataTable<T extends object>({
   onRowClick,
   emptyMessage = "No data found.",
   searchableKey,
- // pageSize=10,
 }: DataTableProps<T>) {
   const [sort, setSort] = useState<SortState<T>>({ key: null, dir: null });
   const [filterText, setFilterText] = useState("");
- // const [page, setPage] = useState(1);
 
   const handleSort = (key: keyof T) => {
     setSort(prev => ({
@@ -45,7 +43,6 @@ function DataTable<T extends object>({
     }));
   };
 
-  // ---------------- FILTER ----------------
   const filteredData = useMemo(() => {
     if (!searchableKey || !filterText) return data;
     return data.filter(row =>
@@ -53,7 +50,6 @@ function DataTable<T extends object>({
     );
   }, [data, filterText, searchableKey]);
 
-  // ---------------- SORT ----------------
   const sortedAndFilteredData = useMemo(() => {
     const result = [...filteredData];
     if (!sort.key || !sort.dir) return result;
@@ -68,27 +64,11 @@ function DataTable<T extends object>({
     });
   }, [filteredData, sort]);
 
-  // ---------------- PAGINATION ----------------
-  // const totalPages = Math.max(
-  //   1,
-  //   Math.ceil(sortedAndFilteredData.length / pageSize)
-  // );
-
-  // const safePage = Math.min(page, totalPages);
-
-  // const paginatedData = sortedAndFilteredData.slice(
-  //   (safePage - 1) * pageSize,
-  //   safePage * pageSize
-  // );
-
-  // Reset page when search OR data changes
   useEffect(() => {
-    //setPage(1);
   }, [filterText, data]);
 
   return (
     <div style={{ fontFamily: "sans-serif" }}>
-      {/* SEARCH */}
       {searchableKey && (
         <input
           type="text"
@@ -104,7 +84,6 @@ function DataTable<T extends object>({
         />
       )}
 
-      {/* TABLE */}
       <table
         style={{
           width: "100%",
@@ -179,36 +158,6 @@ function DataTable<T extends object>({
           )}
         </tbody>
       </table>
-
-      {/* PAGINATION CONTROLS
-      {totalPages > 1 && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            marginTop: 8,
-          }}
-        >
-          <button
-            disabled={safePage <= 1}
-            onClick={() => setPage(p => Math.max(1, p - 1))}
-          >
-            ← Previous
-          </button>
-
-          <span>
-            Page {safePage} of {totalPages} ({sortedAndFilteredData.length} rows)
-          </span>
-
-          <button
-            disabled={safePage >= totalPages}
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
-          >
-            Next →
-          </button>
-        </div>
-      )} */}
     </div>
   );
 }

@@ -6,32 +6,31 @@ const HOLDING_COMPARE_ROWS: {
   key: keyof Holding;
   format?: (v: unknown) => string;
 }[] = [
-  { label: 'Quantity', key: 'qty' },
-  {
-    label: 'Invested Value',
-    key: 'investedValue',
-    format: (v) => '$' + Number(v).toLocaleString(undefined, { minimumFractionDigits: 2 }),
-  },
-  {
-    label: 'Current Value',
-    key: 'currentValue',
-    format: (v) => '$' + Number(v).toLocaleString(undefined, { minimumFractionDigits: 2 }),
-  },
-  {
-    label: 'Total Return',
-    key: 'totalReturn',
-    format: (v) => {
-      const val = Number(v);
-      return (val >= 0 ? '+' : '') + '$' + val.toFixed(2);
+    { label: 'Quantity', key: 'qty' },
+    {
+      label: 'Invested Value',
+      key: 'investedValue',
+      format: (v) => '$' + Number(v).toLocaleString(undefined, { minimumFractionDigits: 2 }),
     },
-  },
-];
+    {
+      label: 'Current Value',
+      key: 'currentValue',
+      format: (v) => '$' + Number(v).toLocaleString(undefined, { minimumFractionDigits: 2 }),
+    },
+    {
+      label: 'Total Return',
+      key: 'totalReturn',
+      format: (v) => {
+        const val = Number(v);
+        return (val >= 0 ? '+' : '') + '$' + val.toFixed(2);
+      },
+    },
+  ];
 const HoldingComparePanel: React.FC = () => {
   const compareList = useHoldingsStore((s) => s.compareList);
   const clearCompare = useHoldingsStore((s) => s.clearCompare);
   const toggleCompare = useHoldingsStore((s) => s.toggleCompare);
 
-  // Only show if 2 or more items are selected
   if (compareList.length < 2) return null;
 
   return (
@@ -39,7 +38,7 @@ const HoldingComparePanel: React.FC = () => {
       position: 'fixed',
       bottom: 0, left: 0, right: 0,
       background: '#fff',
-      borderTop: '2px solid #2563EB', // Blue theme for Holdings
+      borderTop: '2px solid #2563EB',
       padding: '16px 24px',
       zIndex: 1000,
       boxShadow: '0 -4px 12px rgba(0,0,0,0.12)',

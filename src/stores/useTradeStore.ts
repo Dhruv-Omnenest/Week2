@@ -1,4 +1,3 @@
-// stores/useTradeStore.ts
 import { create } from "zustand";
 import type { Trade } from "../types/stock.types";
 import { trades as initialTrades } from "../data/stockData";

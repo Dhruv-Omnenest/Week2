@@ -1,30 +1,20 @@
-import { lazy, useState } from 'react';
+import { lazy } from 'react';
 import SuspenseBoundary from './boundaries/SuspenseBoundary';
-import type { Stock } from './types/stock.types';
-import { stocks } from './data/stockData';
 import CardGridSkeleton from './skeleton/CardGridSkeleton';
 import TableSkeleton from './skeleton/TableSkeleton';
-import { holdings } from './data/holdingsData';
 import FormSkeleton from './skeleton/FormSkeleton';
 import CurrencyTicker from './components/currencyTicker';
 import StockComparePanel from './components/stockComparePanel';
+import { useStockStore } from './stores/useStockStore';
+
 const LiveQuotesFeature = lazy(() => import('./features/quotes/LiveQuotesFeature'));
 const PortfolioFeature = lazy(() => import('./features/portfolioFeature/PortfolioFeature'));
 const PositionsFeature = lazy(() => import('./features/postionFeatures/PositionFeatures'));
 const HoldingsFeature = lazy(() => import('./features/holdings/HoldingsFeature'));
 const TradeFeature = lazy(() => import('./features/tradeFeature/TradeFeature'));
+
 function App() {
-  const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [sectorFilter, setSectorFilter] = useState('');
-  const filteredStocks = stocks.filter((stock) => {
-    const queryLower = searchQuery.toLowerCase();
-    const searchMatches = 
-      stock.symbol.toLowerCase().includes(queryLower) || 
-      stock.name.toLowerCase().includes(queryLower);
-    const sectorMatches = sectorFilter === '' || stock.sector === sectorFilter;
-    return searchMatches && sectorMatches;
-  });
+  const filteredStocks = useStockStore((s) => s.filteredStocks);
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto', padding: 24, fontFamily: 'Arial, sans-serif' }}>
@@ -40,17 +30,11 @@ function App() {
           </>
         }
       >
-        <LiveQuotesFeature
-          stocks={filteredStocks}
-          selectedStock={selectedStock}
-          onSelectStock={setSelectedStock}
-          onSearch={setSearchQuery}
-          onFilterChange={setSectorFilter}
-        />
+        <LiveQuotesFeature />
       </SuspenseBoundary>
 
       <SuspenseBoundary fallback={<TableSkeleton rows={3} cols={3} title="Portfolio Summary" />}>
-        <PortfolioFeature availableStocks={stocks} />
+        <PortfolioFeature />
       </SuspenseBoundary>
 
       <SuspenseBoundary fallback={<TableSkeleton rows={5} cols={6} title="Positions" />}>
@@ -58,7 +42,7 @@ function App() {
       </SuspenseBoundary>
 
       <SuspenseBoundary fallback={<TableSkeleton rows={5} cols={5} title="Holdings" />}>
-        <HoldingsFeature holdings={holdings} />
+        <HoldingsFeature />
       </SuspenseBoundary>
 
       <SuspenseBoundary
@@ -69,10 +53,7 @@ function App() {
           </>
         }
       >
-        <TradeFeature
-          stocks={stocks}
-          selectedStock={selectedStock}
-        />
+        <TradeFeature />
       </SuspenseBoundary>
     </div>
   );

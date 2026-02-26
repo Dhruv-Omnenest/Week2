@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import DataTable from '../../components/DataTable';
 import type { Holding } from '../../types/holding.types';
 import PortfolioPieChart from '../../components/PortfolioPieCharts';
@@ -6,28 +6,13 @@ import PortfolioPieChart from '../../components/PortfolioPieCharts';
 import { useHoldingsStore } from '../../stores/useHoldings';
 import HoldingComparePanel from '../../components/HoldingComparePanel';
 
-interface HoldingsFeatureProps {
-  holdings: Holding[]; 
-}
-
-const HoldingsFeature: React.FC<HoldingsFeatureProps> = ({ holdings: initialData }) => {
-  // 1. Connect to the Store State
-  // We use the store's version of holdings so the UI updates when we Add/Remove
+const HoldingsFeature: React.FC = () => {
   const storeHoldings = useHoldingsStore((s) => s.holdings);
-  const setHoldings = useHoldingsStore((s) => s.setHoldings);
-  const addHolding=useHoldingsStore((s)=>s.addHolding);
+  const addHolding = useHoldingsStore((s) => s.addHolding);
   const compareList = useHoldingsStore((s) => s.compareList);
   const toggleCompare = useHoldingsStore((s) => s.toggleCompare);
   const removeHolding = useHoldingsStore((s) => s.removeHolding);
 
-  // 2. Initialize the store with props if the store is empty
-  useEffect(() => {
-    if (initialData && storeHoldings.length === 0) {
-      setHoldings(initialData);
-    }
-  }, [initialData, setHoldings, storeHoldings.length]);
-
-  // 3. Use storeHoldings for calculations so the chart reflects changes
   const chartData = storeHoldings.map((h) => ({
     name: h.symbol,
     value: Number(h.currentValue) || 0,
@@ -36,12 +21,11 @@ const HoldingsFeature: React.FC<HoldingsFeatureProps> = ({ holdings: initialData
   return (
     <div style={{ paddingBottom: '120px' }}>
       <h2 style={{ color: '#1E40AF' }}>Holdings</h2>
-      
-      {/* Chart now updates automatically when storeHoldings changes */}
+
       <PortfolioPieChart data={chartData} />
 
       <DataTable<Holding>
-        data={storeHoldings} // Use storeHoldings here, NOT initialData
+        data={storeHoldings}
         rowKey="id"
         pageSize={10}
         columns={[
@@ -122,31 +106,27 @@ const HoldingsFeature: React.FC<HoldingsFeatureProps> = ({ holdings: initialData
               </button>
             ),
           },
-      // Inside your DataTable columns
-{
-  key: 'add' as any,
-  header: 'Add +1',
-  render: (_, hold) => (
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        
-        // Calculate the price of ONE share based on current market value
-        const currentPrice = hold.currentValue / hold.qty;
-
-        addHolding({
-          symbol: hold.symbol,
-          qty: 1, 
-          investedValue: currentPrice, // This adds to your cost basis
-          currentValue: currentPrice,  // This adds to your market value
-          totalReturn: 0               // The return on the 1 new share is 0 initially
-        });
-      }}
-    >
-      +1
-    </button>
-  )
-}
+          {
+            key: 'add' as any,
+            header: 'Add +1',
+            render: (_, hold) => (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const currentPrice = hold.currentValue / hold.qty;
+                  addHolding({
+                    symbol: hold.symbol,
+                    qty: 1,
+                    investedValue: currentPrice,
+                    currentValue: currentPrice,
+                    totalReturn: 0
+                  });
+                }}
+              >
+                +1
+              </button>
+            )
+          }
         ]}
       />
 
