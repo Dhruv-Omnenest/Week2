@@ -20,8 +20,6 @@ const TradeFeature: React.FC<TradeFeatureProps> = ({
   selectedStock,
   onSubmitTrade,
 }) => {
- 
-  // NEW: get the slice of items + ref + flag from the hook
   const { visibleItems, bottomRef, hasMore } = useInfiniteScroll(tradeHistory, 10);
  
   return (
@@ -32,12 +30,9 @@ const TradeFeature: React.FC<TradeFeatureProps> = ({
           {visibleItems.length} of {tradeHistory.length} shown
         </span>
       </h2>
- 
-      {/* data={visibleItems} is the only change inside DataTable */}
       <DataTable<Trade>
         data={visibleItems}
         rowKey="id"
-        //filterKey="symbol"
         columns={[
           { key: 'symbol',   header: 'Symbol',  sortable: true },
           { key: 'type',     header: 'Type',
@@ -53,11 +48,7 @@ const TradeFeature: React.FC<TradeFeatureProps> = ({
           { key: 'date',     header: 'Date',  sortable: true },
         ]}
       />
- 
-      {/* NEW: the sentinel div — observer watches this */}
       <div ref={bottomRef} style={{ height: 1 }} />
- 
-      {/* NEW: status messages */}
       {hasMore && (
         <p style={{ textAlign: 'center', color: '#6B7280', padding: '8px 0' }}>
           Scroll down to see more trades...
@@ -68,8 +59,6 @@ const TradeFeature: React.FC<TradeFeatureProps> = ({
           All {tradeHistory.length} trades loaded
         </p>
       )}
- 
-      {/* Trade form is unchanged */}
       <h2 style={{ color: '#1E40AF', marginTop: 32 }}>Place a Trade</h2>
       <TradeForm
         stocks={stocks}
